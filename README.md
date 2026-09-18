@@ -1,4 +1,4 @@
-# InvoiceFlow
+# dmorFacturacion
 
 Aplicación full stack para crear clientes y facturas, generar enlaces de pago con Stripe, confirmar pagos mediante webhooks, enviar correos y marcar facturas vencidas automáticamente.
 

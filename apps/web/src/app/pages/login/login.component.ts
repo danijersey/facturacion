@@ -1,1 +1,76 @@
-import{ChangeDetectionStrategy,Component,inject,signal}from'@angular/core';import{FormBuilder,ReactiveFormsModule,Validators}from'@angular/forms';import{Router}from'@angular/router';import{AuthService}from'../../core/auth.service';@Component({imports:[ReactiveFormsModule],template:`<div class="auth"><form class="card auth-card" [formGroup]="form" (ngSubmit)="submit()"><div class="logo">Invoice<span>Flow</span></div><h1>{{register()?'Crear cuenta':'Bienvenido'}}</h1><p>Automatiza tus facturas y cobros.</p>@if(register()){<label>Nombre<input formControlName="name" placeholder="Daniel Moreno"></label>}<label>Correo<input formControlName="email" type="email" placeholder="correo@ejemplo.com"></label><label>Contraseña<input formControlName="password" type="password" placeholder="Mínimo 6 caracteres"></label>@if(error()){<div class="error">{{error()}}</div>}<button class="primary" [disabled]="form.invalid||loading()">{{loading()?'Procesando...':register()?'Registrarme':'Ingresar'}}</button><button type="button" class="link" (click)="toggle()">{{register()?'Ya tengo una cuenta':'Crear una cuenta'}}</button></form></div>`,changeDetection:ChangeDetectionStrategy.OnPush})export class LoginComponent{private fb=inject(FormBuilder);private auth=inject(AuthService);private router=inject(Router);register=signal(false);loading=signal(false);error=signal('');form=this.fb.nonNullable.group({name:[''],email:['',[Validators.required,Validators.email]],password:['',[Validators.required,Validators.minLength(6)]]});toggle(){this.register.update(v=>!v);this.error.set('')}submit(){if(this.form.invalid)return;this.loading.set(true);const v=this.form.getRawValue();const req=this.register()?this.auth.register(v):this.auth.login(v);req.subscribe({next:()=>this.router.navigateByUrl('/dashboard'),error:e=>{this.error.set(e.error?.message??'No se pudo completar');this.loading.set(false)}})}}
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { AuthService } from "../../core/auth.service";
+@Component({
+  imports: [ReactiveFormsModule],
+  template: `<div class="auth">
+    <form class="card auth-card" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="logo">DMoreno<span>Facturacion</span></div>
+      <h1>{{ register() ? "Crear cuenta" : "Bienvenido" }}</h1>
+      <p>Automatiza tus facturas y cobros.</p>
+      @if (register()) {
+        <label
+          >Nombre<input formControlName="name" placeholder="Daniel Moreno"
+        /></label>
+      }
+      <label
+        >Correo<input
+          formControlName="email"
+          type="email"
+          placeholder="correo@ejemplo.com" /></label
+      ><label
+        >Contraseña<input
+          formControlName="password"
+          type="password"
+          placeholder="Mínimo 6 caracteres"
+      /></label>
+      @if (error()) {
+        <div class="error">{{ error() }}</div>
+      }
+      <button class="primary" [disabled]="form.invalid || loading()">
+        {{
+          loading() ? "Procesando..." : register() ? "Registrarme" : "Ingresar"
+        }}</button
+      ><button type="button" class="link" (click)="toggle()">
+        {{ register() ? "Ya tengo una cuenta" : "Crear una cuenta" }}
+      </button>
+    </form>
+  </div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+  register = signal(false);
+  loading = signal(false);
+  error = signal("");
+  form = this.fb.nonNullable.group({
+    name: [""],
+    email: ["", [Validators.required, Validators.email]],
+    password: ["", [Validators.required, Validators.minLength(6)]],
+  });
+  toggle() {
+    this.register.update((v) => !v);
+    this.error.set("");
+  }
+  submit() {
+    if (this.form.invalid) return;
+    this.loading.set(true);
+    const v = this.form.getRawValue();
+    const req = this.register() ? this.auth.register(v) : this.auth.login(v);
+    req.subscribe({
+      next: () => this.router.navigateByUrl("/dashboard"),
+      error: (e) => {
+        this.error.set(e.error?.message ?? "No se pudo completar");
+        this.loading.set(false);
+      },
+    });
+  }
+}

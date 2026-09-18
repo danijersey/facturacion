@@ -1,1 +1,40 @@
-import{ChangeDetectionStrategy,Component,inject}from'@angular/core';import{Router,RouterLink,RouterLinkActive,RouterOutlet}from'@angular/router';import{AuthService}from'../core/auth.service';@Component({imports:[RouterOutlet,RouterLink,RouterLinkActive],template:`<div class="app"><aside><a class="brand" routerLink="/">Invoice<span>Flow</span></a><nav><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a><a routerLink="/clients" routerLinkActive="active">Clientes</a><a routerLink="/invoices" routerLinkActive="active">Facturas</a></nav><button class="ghost" (click)="logout()">Cerrar sesión</button></aside><main><header><div><small>Panel de control</small><strong>{{auth.user()?.name}}</strong></div></header><section class="content"><router-outlet/></section></main></div>`,changeDetection:ChangeDetectionStrategy.OnPush})export class ShellComponent{auth=inject(AuthService);private router=inject(Router);logout(){this.auth.logout();this.router.navigateByUrl('/login')}}
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from "@angular/router";
+import { AuthService } from "../core/auth.service";
+@Component({
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  template: `<div class="app">
+    <aside>
+      <a class="brand" routerLink="/">DMor<span>Facturacion</span></a>
+      <nav>
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a
+        ><a routerLink="/clients" routerLinkActive="active">Clientes</a
+        ><a routerLink="/invoices" routerLinkActive="active">Facturas</a>
+      </nav>
+      <button class="ghost" (click)="logout()">Cerrar sesión</button>
+    </aside>
+    <main>
+      <header>
+        <div>
+          <small>Panel de control</small
+          ><strong>{{ auth.user()?.name }}</strong>
+        </div>
+      </header>
+      <section class="content"><router-outlet /></section>
+    </main>
+  </div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ShellComponent {
+  auth = inject(AuthService);
+  private router = inject(Router);
+  logout() {
+    this.auth.logout();
+    this.router.navigateByUrl("/login");
+  }
+}

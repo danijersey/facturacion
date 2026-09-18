@@ -8,7 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors({ origin: process.env.FRONTEND_URL ?? 'http://localhost:4200' });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  const config = new DocumentBuilder().setTitle('InvoiceFlow API').setVersion('1.0').addBearerAuth().build();
+  const config = new DocumentBuilder().setTitle('dmorFacturacion API').setVersion('1.0').addBearerAuth().build();
   SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
   await app.listen(process.env.PORT ?? 3000);
 }

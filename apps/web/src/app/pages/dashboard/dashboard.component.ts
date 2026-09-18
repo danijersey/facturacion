@@ -1,1 +1,63 @@
-import{CurrencyPipe}from'@angular/common';import{ChangeDetectionStrategy,Component,inject,signal}from'@angular/core';import{ApiService}from'../../core/api.service';import{Dashboard}from'../../core/models';@Component({imports:[CurrencyPipe],template:`<div class="page-title"><div><h1>Dashboard</h1><p>Resumen general de tu facturación.</p></div></div>@if(data();as d){<div class="metrics"><article class="card"><span>Facturado</span><strong>{{d.total|currency:'COP':'symbol-narrow':'1.0-0'}}</strong></article><article class="card success"><span>Pagado</span><strong>{{d.paid|currency:'COP':'symbol-narrow':'1.0-0'}}</strong></article><article class="card warning"><span>Pendiente</span><strong>{{d.pending|currency:'COP':'symbol-narrow':'1.0-0'}}</strong></article><article class="card danger"><span>Vencido</span><strong>{{d.overdue|currency:'COP':'symbol-narrow':'1.0-0'}}</strong></article></div><div class="card welcome"><h2>{{d.count}} facturas registradas</h2><p>Crea clientes, genera cobros con Stripe y deja que InvoiceFlow actualice los pagos automáticamente.</p></div>}@else{<p>Cargando...</p>}`,changeDetection:ChangeDetectionStrategy.OnPush})export class DashboardComponent{private api=inject(ApiService);data=signal<Dashboard|null>(null);constructor(){this.api.dashboard().subscribe(x=>this.data.set(x))}}
+import { CurrencyPipe } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from "@angular/core";
+import { ApiService } from "../../core/api.service";
+import { Dashboard } from "../../core/models";
+@Component({
+  imports: [CurrencyPipe],
+  template: `<div class="page-title">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Resumen general de tu facturación.</p>
+      </div>
+    </div>
+    @if (data(); as d) {
+      <div class="metrics">
+        <article class="card">
+          <span>Facturado</span
+          ><strong>{{
+            d.total | currency: "COP" : "symbol-narrow" : "1.0-0"
+          }}</strong>
+        </article>
+        <article class="card success">
+          <span>Pagado</span
+          ><strong>{{
+            d.paid | currency: "COP" : "symbol-narrow" : "1.0-0"
+          }}</strong>
+        </article>
+        <article class="card warning">
+          <span>Pendiente</span
+          ><strong>{{
+            d.pending | currency: "COP" : "symbol-narrow" : "1.0-0"
+          }}</strong>
+        </article>
+        <article class="card danger">
+          <span>Vencido</span
+          ><strong>{{
+            d.overdue | currency: "COP" : "symbol-narrow" : "1.0-0"
+          }}</strong>
+        </article>
+      </div>
+      <div class="card welcome">
+        <h2>{{ d.count }} facturas registradas</h2>
+        <p>
+          Crea clientes, genera cobros con Stripe y deja que dmorFacturacion
+          actualice los pagos automáticamente.
+        </p>
+      </div>
+    } @else {
+      <p>Cargando...</p>
+    }`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DashboardComponent {
+  private api = inject(ApiService);
+  data = signal<Dashboard | null>(null);
+  constructor() {
+    this.api.dashboard().subscribe((x) => this.data.set(x));
+  }
+}

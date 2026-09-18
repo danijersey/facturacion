@@ -1,22 +1,22 @@
 services:
   mysql:
     image: mysql:8.4
-    container_name: invoiceflow-mysql
+    container_name: dmorFacturacion-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: invoiceflow
-      MYSQL_USER: invoiceflow
-      MYSQL_PASSWORD: invoiceflow
+      MYSQL_DATABASE: dmorFacturacion
+      MYSQL_USER: dmorFacturacion
+      MYSQL_PASSWORD: dmorFacturacion
     ports:
       - "3307:3306"
     volumes:
-      - invoiceflow_data:/var/lib/mysql
+      - dmorFacturacion_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uinvoiceflow", "-pinvoiceflow"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-udmorFacturacion", "-pdmorFacturacion"]
       interval: 5s
       timeout: 5s
       retries: 15
 volumes:
-  invoiceflow_data:
+  dmorFacturacion_data:

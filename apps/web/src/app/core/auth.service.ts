@@ -1,1 +1,46 @@
-import{HttpClient}from'@angular/common/http';import{inject,Injectable,signal}from'@angular/core';import{tap}from'rxjs';import{environment}from'../../environments/environment';@Injectable({providedIn:'root'})export class AuthService{private http=inject(HttpClient);user=signal<{id:number;name:string;email:string}|null>(JSON.parse(localStorage.getItem('user')??'null'));login(data:{email:string;password:string}){return this.http.post<{accessToken:string;user:{id:number;name:string;email:string}}>(`${environment.apiUrl}/auth/login`,data).pipe(tap(r=>{localStorage.setItem('token',r.accessToken);localStorage.setItem('user',JSON.stringify(r.user));this.user.set(r.user)}))}register(data:{name:string;email:string;password:string}){return this.http.post<{accessToken:string;user:{id:number;name:string;email:string}}>(`${environment.apiUrl}/auth/register`,data).pipe(tap(r=>{localStorage.setItem('token',r.accessToken);localStorage.setItem('user',JSON.stringify(r.user));this.user.set(r.user)}))}logout(){localStorage.clear();this.user.set(null)}token(){return localStorage.getItem('token')}}
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable, signal } from "@angular/core";
+import { tap } from "rxjs";
+import { environment } from "../../environments/environment";
+@Injectable({ providedIn: "root" })
+export class AuthService {
+  private http = inject(HttpClient);
+  user = signal<{ id: number; name: string; email: string } | null>(
+    JSON.parse(localStorage.getItem("user") ?? "null"),
+  );
+  login(data: { email: string; password: string }) {
+    return this.http
+      .post<{
+        accessToken: string;
+        user: { id: number; name: string; email: string };
+      }>(`${environment.apiUrl}/auth/login`, data)
+      .pipe(
+        tap((r) => {
+          localStorage.setItem("token", r.accessToken);
+          localStorage.setItem("user", JSON.stringify(r.user));
+          this.user.set(r.user);
+        }),
+      );
+  }
+  register(data: { name: string; email: string; password: string }) {
+    return this.http
+      .post<{
+        accessToken: string;
+        user: { id: number; name: string; email: string };
+      }>(`${environment.apiUrl}/auth/register`, data)
+      .pipe(
+        tap((r) => {
+          localStorage.setItem("token", r.accessToken);
+          localStorage.setItem("user", JSON.stringify(r.user));
+          this.user.set(r.user);
+        }),
+      );
+  }
+  logout() {
+    localStorage.clear();
+    this.user.set(null);
+  }
+  token() {
+    return localStorage.getItem("token");
+  }
+}
